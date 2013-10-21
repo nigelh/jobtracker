@@ -1,0 +1,33 @@
+
+icon-wrapper {
+    left: 1px;
+    max-height: 40px; <-- height
+    max-width: 40px; <-- width
+    position: absolute;
+    top: 0;
+}
+
+body > iframe { display: none; }
+
+.kbw-signature { width: 400px; height: 200px; }
+
+.txtwrapper{
+    font-size: 10px;
+}
+
+body {
+  font-size: 10px; 
+  font-weight: bold; 
+}
+
+.ui-btn-inner{
+    text-overflow: initial; /* Get rid of the ellipsis */
+    padding-left: 5px; /* Play with padding to make max use of available button width */
+}
+.ui-btn-text {
+    font-size: 10px; /* Play with font size of the text */
+}
+
+.ui-header {
+    font-size: 10px; /* Play with font size of the text */
+}

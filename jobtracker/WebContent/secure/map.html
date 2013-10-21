@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Map Location</title>
+<meta name="viewport" content="width=device-width,user-scalable=yes">  
+
+
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<link rel="stylesheet" href="css/jobtracker.css" />
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<!--  <script type="text/javascript" src="js/jquery-ui.min.js"></script> -->
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+<!-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places"></script> -->
+<script type="text/javascript" src="js/jquery.ui.map.js"></script>
+<script type="text/javascript" src="js/jquery.ui.map.services.js"></script>
+<script type="text/javascript" src="js/jquery.ui.map.extensions.js"></script>
+<script type="text/javascript" src="js/jobtracker.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="location_page" data-add-back-btn="true"  >
+<div data-role="header" id="location_header"></div>
+<div data-role="content" align="center">
+
+<div data-role="content">
+<div class="ui-bar-c ui-corner-all ui-shadow" style="padding: 1em;">
+<div id="map_canvas" style="height: 350px;"></div>
+</div>
+</div>
+
+
+</div>
+<div data-role="footer"  data-id="toolbar">
+<section class="ui-grid-a">
+<div class="ui-block-a"id="location_back_button"><a href="#" data-role="button" data-theme="b"  data-icon="forward">Back</a></div>
+</section>
+</div>
+
+</div>  
+<script type="text/javascript" >
+var back_button = $('#location_back_button');
+var header = $("#location_header");
+var jobKey = decodeURIComponent($.urlParam('job'));
+var position;
+var job;
+var address;
+
+$(document).on('pageshow' ,function(e,data){
+   
+	$.ajaxSetup({
+		async: false
+		});
+
+   $.getJSON('/jobtracker/jobtracker-service/job?job='+jobKey, function(data) {
+	    job = data[0];
+	    header.empty();
+	        header.html("<h1>"+job.title+"</h1>");
+	        position = job.location.latitude+","+job.location.longitude;
+	       
+	        
+	});
+   
+   $.getJSON('/jobtracker/jobtracker-service/address', function(data) {
+	   
+	    address = "<p>"+data.address_line1+",</p>"+
+	    "<p>"+data.address_line2+",</p>"+
+	    "<p>"+data.address_line3+",</p>"+
+	    "<p>"+data.address_town+",</p>"+
+	    "<p>"+data.address_county+",</p>"+
+	    "<p>"+data.address_code+"</p>";    
+	});
+
+   $.ajaxSetup({
+		async: true
+		});
+   
+  // var map = $('#map_canvas').gmap('addMarker', {'position': position, 'bounds': true });
+   $('#map_canvas').gmap().bind('init', function(ev, map) {
+		   var marker = $('#map_canvas').gmap('addMarker', {'position': position, 'bounds': true});
+		   marker.click(function() {
+			$('#map_canvas').gmap('openInfoWindow', {'content': address}, this);
+		     });
+		   $('#map_canvas').gmap('option', 'zoom', 10); 
+	});
+
+   back_button.click(function(){ $.mobile.back();});
+  	
+	});
+
+
+</script>
+</body>
+</html>

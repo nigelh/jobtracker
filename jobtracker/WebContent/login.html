@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JobTracker</title>
+<meta name="viewport" content="width=device-width,user-scalable=yes">  
+
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<link rel="stylesheet" href="secure/css/jobtracker.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+<script src="secure/js/jobtracker.js"></script> 
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" sizes="80x80" href="icons/icon80.png">
+<link rel="apple-touch-icon" href="images/icon57.png" sizes="57x57">
+<link rel="apple-touch-icon" href="images/icon114.png" sizes="114x114">
+<link rel="apple-touch-icon" href="images/icon72.png" sizes="72x72">
+<link rel="apple-touch-icon-precomposed" sizes="android-only" href="images/icon57.png">
+</head>
+
+
+
+<body>
+
+<!-- **** Login PAGE **** -->
+
+
+<div data-role="page" id="login_page">
+
+  <div data-role="header" class="ui-header" id="connected">
+        <h3>JobTracker Login</h3>
+  </div>  
+  
+
+<div data-role="content">
+    
+<form id="loginform" action="">  
+<div data-role="fieldcontain">  
+<label for="username">Username:*</label>  
+    <input required id="username" name="username" value="nigelh" type="text" placeholder="Enter your JobTrack Username here.">            
+</div>  
+<div data-role="fieldcontain">  
+<label for="password">Password:*</label>  
+<input required id="password" name="password" value="password" type="password" placeholder="Enter your JobTrack password here.">            
+</div>  
+  
+<button id="login_submit"  >Login</button>  
+</form>  
+ </div>  
+
+ 
+  
+  <div data-role="footer"  data-id="toolbar">
+   <section class="ui-grid-a">
+      <div class="ui-block-a"><a href="help.html" data-role="button" data-theme="b" target="_blank" data-icon="forward">Help</a></div>
+      <div id="logout_button"  class="ui-block-b"><a href="#" data-role="button" data-theme="b"  data-icon="forward" >Logout</a></div>
+    </section>
+  
+  </div>
+  </div>
+
+  
+<script type="text/javascript" >
+
+$(document).on('pageshow',function(event,data)
+		{        
+				
+		});
+		
+$(document).on('pageinit',function() { 	
+	
+	//window.setInterval(ping, 100000);
+
+	$.get("jobtracker-service/login",function(data,status){
+			    
+				if( status == "success" && data.user_name != null ){
+					$("#logout_button").show();
+				}
+				else {
+					$("#logout_button").hide();
+				} 
+			},"json");
+	
+	$("#login_submit").click(function(){
+		
+		var username = $("#username").val();
+		var password = $("#password").val();
+		
+		 $.post("jobtracker-service/login",
+				 {"username":username,"password":password},
+			  function(data,status){
+    		   
+	    	    if( status == "success" && data.user_name != null )
+	    	    {   
+	    		  contact_details = data;	 
+	    		  document.location.href = "secure/jobtracker.html";
+	    	   }
+	    	    else {   
+	    		  alert("Logon failure - Please try again.");
+	    		  $("#username").val("");
+	    		  $("#password").val("");
+	    	    }		    		    
+	    	  },"json");
+	});
+	
+	$("#logout_button").click(function() {
+		var r=confirm("Do you really want to logout?");
+		if (r==true)
+		  {
+			$.ajax({
+	    	    url: "jobtracker-service/login",
+	    	    type: 'DELETE',
+	    	    success: function(result) {
+	    	    	document.location.href = "login.html?redirect=/jobtracker/secure/index.html";
+	    	    }
+	    	});
+		  }
+		});
+	
+    $("#logout_yes").click(function() {
+  
+    	$.ajax({
+    	    url: "jobtracker-service/login",
+    	    type: 'DELETE',
+    	    success: function(result) {
+    	    	document.location.href = "login.html?redirect=/jobtracker/secure/index.html";
+    	    }
+    	});
+    	
+        
+        });
+    
+    $("#logout_no").click(function(){
+        $("#logout_confirmation_dialog").dialog("close");
+    });
+	
+	});
+</script>
+
+
+</body>
+</html>

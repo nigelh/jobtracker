@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JobTracker</title>
+<meta name="viewport" content="width=device-width,user-scalable=yes">  
+
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<link rel="stylesheet" href="css/jobtracker.css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.signature.js"></script>
+<script type="text/javascript" src="js/jobtracker.js"></script>
+
+</head>
+<body>
+
+<div data-role="page" id="enter_signature_page" data-add-back-btn="true" ontouchmove="touchMove(event)" >
+<div data-role="header" id="enter_signature_header"></div>
+<div data-role="content"   align="center">    
+<div id="sig" ></div>
+
+ 
+</div>  
+<div data-role="footer" data-position="fixed" data-id="toolbar">
+       <section class="ui-grid-c">
+     
+      <div class="ui-block-a" id="signature_clear_button"><a href="#" data-role="button" data-theme="b"  data-icon="forward">Clear</a></div>
+      <div class="ui-block-b"id="signature_capture_button"><a href="#" data-role="button" data-theme="b"  data-icon="forward">Capture</a></div>
+      <div class="ui-block-c"id="signature_back_button"><a href="#" data-role="button" data-theme="b"  data-icon="forward">Back</a></div>
+      </section>
+  </div>
+
+</div>  
+<script type="text/javascript" >
+
+   var selected_job;
+   var sig = $("#sig");
+   var clear_button =  $('#signature_clear_button');
+   var capture_button = $('#signature_capture_button');
+   var back_button = $('#signature_back_button');
+   var header = $("#enter_signature_header");
+   
+   
+
+    $(document).on('pageshow' ,function(e,data){
+   
+    sig.height(getRealContentHeight()).width('100%');
+    sig.signature();
+    clear_button.click(function() {
+		sig.signature('clear');
+	});
+    var jobKey = decodeURIComponent($.urlParam('job'));
+
+	
+	$.getJSON('/jobtracker/jobtracker-service/job?job='+jobKey, function(data) {
+    	selected_job = data[0];
+    	if( selected_job.signature != null )
+    	{
+    	   sig.signature('draw',selected_job.signature);	   
+    	}
+    	 header.empty();
+  	     header.html("<h4>"+selected_job.title+"</h4>");
+  	     if( selected_job.status == "COMPLETED") {
+		      clear_button.hide();
+		      capture_button.hide();
+		      sig.signature('disable');
+	     } else {
+		     clear_button.show();
+		     capture_button.show();
+		     sig.signature('enable');
+	     }
+    	});
+	
+	back_button.click(function(){ $.mobile.back();});
+	
+    capture_button.click(function() {
+    	var json = sig.signature('toJSON');
+    	if( json == '{"lines":[]}') {
+    		alert("Cannot caputure an blank signature.");
+    		return;
+    	} else {
+    		selected_job.signature = json;
+    	}
+		
+		selected_job.status = "COMPLETED";
+		
+		$.ajax({
+    	    url: '/jobtracker/jobtracker-service/job?job='+selected_job.key, 
+    	    contentType:'application/json',
+    	    data: JSON.stringify(selected_job), 
+    	    dataType:'json', 
+    	    type:'POST', 
+    	    async:false, 
+    	    success: function(data) {            
+    	     // selected_job = data;
+    	      alert("Update successfully completed");
+    	     
+    	      
+    	    },
+    	    error: function(data) { 
+    	    	alert("Failed to update - Please try again");
+    	    }
+    	  });
+		
+	});
+});
+
+
+
+touchMove = function(event) {
+    event.preventDefault();
+    
+    
+}
+</script>
+</body>
+</html>

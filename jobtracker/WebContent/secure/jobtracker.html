@@ -1,0 +1,856 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>JobTracker</title>
+<meta name="viewport" content="width=device-width,user-scalable=yes">  
+
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<link rel="stylesheet" href="css/jobtracker.css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+</head>
+ 
+<body>
+
+<!-- **** HOME PAGE **** -->
+<div data-role="page" id="home_page">
+
+  <div data-role="header" class="ui-header" id="connected">
+  
+       <section class="ui-grid-b">
+       
+        <div  id="user_image" class="ui-block-a" ></div>
+        <div class="ui-block-b"><h1>JobTracker</h1></div>
+        <div  class="ui-block-c"  >
+        <div class="icon_wrapper">
+        <img id="status_image" align="right" class="icon-wrapper" src="images/disconnected.jpg"   > 
+        </div>
+        </div>      
+        
+       </section>
+    
+  </div>  
+
+  <div data-role="content">
+      <ul data-role="listview" >
+       <li data-theme="a"><a href="#personal_details_page">Contact Details</a></li>
+       <li data-theme="c"><a href="#work_contact_list_page">Work Contacts</a></li>
+       <li data-theme="a"><a href="#jobs_summary_page">Job Assignments</a></li>
+  
+      </ul>
+  </div>
+  
+  <div data-role="footer"  data-id="toolbar">
+   <section class="ui-grid-a">
+      <div class="ui-block-a"><a href="help.html" data-role="button" data-theme="b" target="_blank" data-icon="forward">Help</a></div>
+      <div id="logout_button" style="display:none;" class="ui-block-b"><a href="#" data-role="button" data-theme="b"  data-icon="forward">Logout</a></div>
+    </section>
+  
+  </div>
+ </div>
+ 
+
+  
+  <div data-role="page" id="personal_details_page"  >
+     <div data-role="header">
+       <h1>Contact Details</h1>
+     </div>
+ 
+     <div data-role="content">
+       <div data-role="collapsible" data-collapsed="true">
+       <h1>Contact Details</h1> 
+       <form id="contact_details_form" action="">
+         <div style="display:none;"><input type="text" name="key" value=""></div>
+         <div style="display:none;"><input type="text" name="image" value=""></div>
+         <div style="display:none;"><input type="text" name="type" value=""></div>
+         
+     
+         <div data-role="fieldcontainer">
+            <label for="user_name">Name:</label><input data-mini="true" type="text" maxlength="40" size="20" required name="user_name" value="">
+         </div>
+
+                 <div data-role="fieldcontainer">
+                 <label for="home_number">Home Telephone:</label><input maxlength="15" required type="tel" name="home_number" value=""> 
+                 </div>
+
+                 <div data-role="fieldcontainer">
+                 <label for="work_number">Works Telephone:</label><input maxlength="15" required type="tel" name="work_number" value="">
+                 </div>
+
+                 <div data-role="fieldcontainer">
+                 <label for="email_address">Email Address:</label><input pattern="[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}" maxlength="40" size="20" required type="email" name="email_address" value="">
+                 </div>
+               
+       
+        <a href="#" id="update_contact_details" data-role="button" data-icon="forward">Update</a> 
+       
+        </form>
+         </div> 
+        <form id="address_form" action="">
+        <div style="display:none;"><input type="text" name="key" value=""></div>
+        <div style="display:none;"><input type="text" name="type" value=""></div>
+        <div data-role="collapsible" data-collapsed="true">
+        
+        <h1>Address:</h1>
+            
+                 <div data-role="fieldcontainer">
+                 <label for="address_line1">Line1:</label><input data-mini="true" maxlength="40" required type="text" name="address_line1" value="">
+                 <label for="address_line2">Line2:</label><input data-mini="true" maxlength="40" required type="text" name="address_line2" value="">
+                 <label for="address_line3">Line3:</label><input data-mini="true" maxlength="40" required type="text" name="address_line3" value="">
+                 <label for="address_town">Town:</label><input data-mini="true" maxlength="40" required type="text" name="address_town" value="">
+                 <label for="address_county">County:</label><input data-mini="true" maxlength="40" required type="text" name="address_county" value="">
+                 <label for="address_code">Postal Code:</label><input data-mini="true" maxlength="12" required type="text" name="address_code" value="">
+                 </div>
+                <a href="#" id="update_address" data-role="button" data-icon="forward">Update</a>
+        </div>
+        </form>
+     </div>
+  </div>
+  
+  <div data-role="page" id="work_contact_list_page" >
+     <div data-role="header">
+       <h1>Work Contacts</h1>
+     </div>
+ 
+     <div data-role="content">
+      <ul data-role="listview" id="contacts_list">
+      </ul>
+  </div>
+  </div>
+  
+  <div data-role="page" id="contact_page" >
+     <div data-role="header" id="contact_page_header" >
+       
+     </div>
+     
+     <div data-role="content">
+      <ul data-role="listview" id="contact_method_list">
+        <li data-theme="a" ><a href="tel:+01614286850">Phone</a></li>
+        <li data-theme="b" ><a href="mailto:nigelh@hotmail.com">Send Email</a></li>
+        <li data-theme="a" ><a href="sms://+01614286850" >Send SMS</a></li>
+      </ul>
+  </div>
+  </div>
+  
+  <div data-role="page" id="jobs_summary_page" >
+     <div data-role="header">
+       <h1>Job Assignments</h1>
+     </div>
+     
+     <div data-role="content">
+      <ul data-role="listview" id="jobs_summary_list">      
+      </ul>
+     </div>
+ </div>   
+ 
+ <div data-role="page" id="assigned_jobs_list_page" >
+     <div data-role="header">
+       <h1>Assigned Jobs</h1>
+     </div>
+     
+     <div data-role="content">
+      <ul data-role="listview" id="assigned_jobs_list">      
+      </ul>
+     </div>
+ </div>  
+ 
+ <div data-role="page" id="started_jobs_list_page" >
+     <div data-role="header">
+       <h1>Started Jobs</h1>
+     </div>
+     
+     <div data-role="content">
+      <ul data-role="listview" id="started_jobs_list">      
+      </ul>
+     </div>
+ </div> 
+ 
+ <div data-role="page" id="completed_jobs_list_page" >
+     <div data-role="header">
+       <h1>Completed Jobs</h1>
+     </div>
+     
+     <div data-role="content">
+      <ul data-role="listview" id="completed_jobs_list">      
+      </ul>
+     </div>
+ </div> 
+ 
+ <div data-role="page" id="job_notes_page" >
+     <div data-role="header" id="job_notes_header">
+     </div>
+     
+     <div data-role="content">
+     <div data-role="controlgroup" >
+        <div data-role="listview" id="job_notes_list" >
+        </div>
+        
+     </div>
+     <div data-role="controlgroup" >
+        <a href="#job_note_entry_page" data-role="button">Add Note</a>
+     </div>
+     </div> 
+</div>
+
+<div data-role="page" id="job_note_entry_page" >
+     <div data-role="header" id="job_note_entry_header">
+     </div>
+     <div data-role="content">
+     <div data-role="controlgroup" >   
+         <textarea id="job_note_entry_text"></textarea>
+         <a href="#" id="job_note_entry_button" data-role="button">Add Note</a>
+     </div>
+     </div> 
+</div>
+ 
+ <div data-role="page" id="job_details_page" >
+     <div data-role="header" id="job_details_page_header">
+     </div>
+     
+     <div data-role="content">
+       <form id="job_details_form" action="">
+        <div data-role="collapsible" data-collapsed="true">   
+        <h1>Customer Name:</h1>
+       <div data-role="fieldcontainer">
+           <input data-mini="true"  name="customerName" readonly value="">
+       </div>
+       </div>
+       
+       <div data-role="collapsible" data-collapsed="true">   
+        <h1>Contact Number:</h1>
+       <div data-role="controlgroup">
+           <input data-mini="true"  name="contactNumber" readonly value="">
+           <a id="job_contact_phone" href="#" data-role="button">Phone</a>
+       </div>
+       </div>
+       <div data-role="collapsible" data-collapsed="true">   
+        <h1>Start Date:</h1>
+       <div data-role="fieldcontainer">
+           <input data-mini="true"  name="startDate" readonly value="">
+       </div>
+       </div>
+       
+       <div data-role="collapsible" data-collapsed="true">
+        
+        <h1>Address:</h1>
+                 <div data-role="fieldcontainer" id="job_address">
+                 <label for="address_line1">Line1:</label><input data-mini="true" maxlength="40"  readonly name="address_line1" value="">
+                 <label for="address_line2">Line2:</label><input data-mini="true" maxlength="40" readonly name="address_line2" value="">
+                 <label for="address_line3">Line3:</label><input data-mini="true" maxlength="40"  readonly name="address_line3" value="">
+                 <label for="address_town">Town:</label><input data-mini="true" maxlength="40" readonly name="address_town" value="">
+                 <label for="address_county">County:</label><input data-mini="true" maxlength="40" readonly name="address_county" value="">
+                 <label for="address_code">Postal Code:</label><input data-mini="true" maxlength="12" readonly name="address_code" value="">
+                 </div>
+        </div>
+        <div data-role="collapsible" data-collapsed="true"> 
+        <h1>Description:</h1>
+            <div data-role="fieldcontainer">
+               <textarea name="description" readonly id="job_description_textarea" ></textarea>
+            </div>
+        </div>
+        
+       </form>
+       <div data-role="controlgroup">
+            <a href="#" rel="external" data-role="button" style="display:none;" id="show_map_button">Show On Map</a>
+        </div>
+        <div data-role="controlgroup">
+            <a href="#job_notes_page" data-role="button">Show/Add Notes</a>
+        </div>
+        <div data-role="controlgroup" >
+            <a href="#" id="job_start_button" data-role="button" style="display:none;">Start Job</a>
+        </div>
+        <div data-role="controlgroup" >
+            <a href='#' rel="external" id="job_complete_button" data-role="button" style="display:none;">Complete/Signoff Job</a>
+        </div>
+        <div data-role="controlgroup" >
+            <a href='#' rel="external" id="show_signature_button" data-role="button" style="display:none;">Show Signature</a>
+        </div>
+        
+        
+     </div>
+ </div> 
+ 
+<script src="js/jobtracker.js"></script> 
+
+<script type="text/javascript" >
+
+var contacts;
+var assigned_jobs;
+var started_jobs;
+var completed_jobs;
+
+
+$(document).on('pageinit',function() { 	
+	window.setInterval(ping, 9000);
+	$.get("/jobtracker/jobtracker-service/login",function(data,status){
+	    if( status == "success" && data.user_name != null ){
+	    	contact_details = data;
+			display_login_status();
+		}
+		else {
+			event.preventDefault();
+			document.location = "/jobtracker/login.html";
+		} 
+	},"json");
+	
+});
+	
+
+
+	$("#logout_button").click(function() {
+		var r=confirm("Do you really want to logout?");
+		if (r==true)
+		  {
+			$.ajax({
+	    	    url: "/jobtracker/jobtracker-service/login",
+	    	    type: 'DELETE',
+	    	    success: function(result) {
+	    	    	document.location.href = "/jobtracker/login.html";
+	    	    }
+	    	});
+		  }
+	});
+	
+      
+    $("#update_contact_details").click(function() {
+    	var values = {};
+        $.each($('#contact_details_form').serializeArray(), function(i, field) {
+      	    values[field.name] = field.value;
+        });
+    	  $.ajax({
+    	    url: '/jobtracker/jobtracker-service/contactdetails', 
+    	    contentType:'application/json',
+    	    data: JSON.stringify(values), 
+    	    dataType:'json', 
+    	    type:'POST', 
+    	    async:false, 
+    	    success: function(data) {  
+    	    	$.getJSON('/jobtracker/jobtracker-service/contactdetails', function(data) {
+        	    	var $inputs = $('#contact_details_form input');
+        	    	$.each(data[0], function(key, value) {
+        	    	  $inputs.filter(function() {
+        	    	    return key == this.name;
+        	    	  }).val(value);
+        	    	});
+        	    	alert("Update was successful");
+        	    	});
+    	      
+    	      
+    	    },
+    	    error: function(data) { 
+    	    	alert("Update failure. Please try again.");
+    	    }
+    	  });
+    	});
+    
+    $("#update_address").click(function() {
+    	var values = {};
+        $.each($('#address_form').serializeArray(), function(i, field) {
+      	    values[field.name] = field.value;
+        });
+    	  $.ajax({
+    	    url: '/jobtracker/jobtracker-service/address', 
+    	    contentType:'application/json',
+    	    data: JSON.stringify(values), 
+    	    dataType:'json', 
+    	    type:'POST', 
+    	    async:false, 
+    	    success: function(data) {            
+    	    	alert("Update was successful");
+    	    },
+    	    error: function(data) { 
+    	    	alert("Update failure. Please try again.");
+    	    }
+    	  });
+    	});
+    
+    $(document).bind("pagebeforechange", function(e, data) {
+    	// We only want to handle changePage() calls where the caller is asking to load a page by URL.
+    	if (typeof data.toPage === "string") {
+    	   // We only want to handle #details url.
+    	    var u = $.mobile.path.parseUrl(data.toPage);
+    	    var position = u.href.indexOf("#show_contact_");
+    	    if ( position >= 0)
+    	    {
+    	        index = u.href.substring(position+14);
+    	        populateContactPage(u,data.options,contacts[index]);
+    	        e.preventDefault();
+    	        return;
+    	    }
+            
+            var postfix = /^#personal_details_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	      
+    	       populateContactDetailsPage(u,data.options);
+    	       e.preventDefault();
+    	       return;
+    	    } 
+    	    postfix = /^#work_contact_list_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	    	
+     	        populateWorkContactListPage(u,data.options);
+     	        e.preventDefault();
+     	        return;
+     	    } 
+    	    
+    	    postfix = /^#jobs_summary_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	    	
+     	        populateJobSummaryPage(u,data.options);
+     	        e.preventDefault();
+     	        return;
+     	    } 
+    	    
+    	    postfix = /^#assigned_jobs_list_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	    	
+    	    	populateAssignedJobsListPage(u,data.options);
+     	        e.preventDefault();
+     	        return;
+     	    } 
+    	    
+    	    postfix = /^#started_jobs_list_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	    	
+    	    	populateStartedJobsListPage(u,data.options);
+     	        e.preventDefault();
+     	        return;
+     	    } 
+    	    
+    	    postfix = /^#completed_jobs_list_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	    	
+    	    	populateCompletedJobsListPage(u,data.options);
+     	        e.preventDefault();
+     	        return;
+     	    } 
+    	    
+    	    postfix = /^#job_notes_page/;
+    	    if (u.hash.search(postfix) !== -1) {
+    	    	
+    	    	populateJobNotesListPage(u,data.options);
+     	        e.preventDefault();
+     	        return;
+     	    } 
+    	    
+    	    postfix = /^#job_note_entry_page/;
+            if (u.hash.search(postfix) !== -1) {
+    	    	populateJobNoteEntryPage();   
+     	        return;
+     	    } 
+    	    
+    	    position = u.href.indexOf("#display_assigned_job");
+    	    if ( position >= 0)
+    	    {
+    	        index = u.href.substring(position+21);
+    	        populateJobDetailsPage(u,data.options,assigned_jobs[index]);
+    	        e.preventDefault();
+    	        return;
+    	    }
+    	    
+    	    position = u.href.indexOf("#display_started_job");
+    	    if ( position >= 0)
+    	    {
+    	        index = u.href.substring(position+20);
+    	        populateJobDetailsPage(u,data.options,started_jobs[index]);
+    	        e.preventDefault();
+    	        return;
+    	    }
+    	    
+    	    position = u.href.indexOf("#display_completed_job");
+    	    if ( position >= 0)
+    	    {
+    	        index = u.href.substring(position+22);
+    	        populateJobDetailsPage(u,data.options,completed_jobs[index]);
+    	        e.preventDefault();
+    	        return;
+    	    }
+    	}
+    	});
+    
+    function populateContactPage(urlObj,options,contact){
+    	// Get the url parameter
+    	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+    	
+    	// The page we use to display QR code is already in the DOM.
+    	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+    	//var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+    	
+    	if (qrUrl) {
+        	// Get the page we are going to write content into.
+        	   // var $page = $(pageSelector);
+
+        	    // Make sure the url displayed in the the browser's location field includes parameters
+        	    options.dataUrl = urlObj.href;
+        	 
+        	   // Now call changePage() and tell it to switch to the page we just modified.
+        	   $("#contact_page_header").html("<h1>"+contact.user_name+"</h1><img src='"+contact.image+"' class='icon-wraper' />");
+        	   $("#contact_method_list").empty();
+        	   $("#contact_method_list").append('<li data-theme="a" ><a href="tel:+'+contact.work_number+'">Phone Work Number</a></li>');
+        	   $("#contact_method_list").append('<li data-theme="b" ><a href="tel:+'+contact.home_number+'">Phone Home Number</a></li>');
+        	   $("#contact_method_list").append('<li data-theme="a" ><a href="sms://+'+contact.work_number+'" >Send SMS to Work Number</a></li>');
+        	   $("#contact_method_list").append('<li data-theme="b" ><a href="sms://+'+contact.home_number+'" >Send SMS to Home Number</a></li>');
+        	   $("#contact_method_list").append('<li data-theme="a" ><a href="mailto:'+contact.email_address+'">Send Email</a></li>');
+        	  	
+        	   
+    	    	
+        	   $.mobile.changePage("#contact_page", options);
+        	   $("#contact_method_list").listview('refresh');
+        	}
+    	
+    };
+    
+    function populateContactDetailsPage(urlObj, options) {
+    	// Get the url parameter
+    	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+    	
+    	// The page we use to display QR code is already in the DOM.
+    	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+    	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+    	
+    	if (qrUrl) {
+    	// Get the page we are going to write content into.
+    	    var $page = $(pageSelector);
+    	    $.getJSON('/jobtracker/jobtracker-service/contactdetails', function(data) {
+    	    	var $inputs = $('#contact_details_form input');
+    	    	$.each(data[0], function(key, value) {
+    	    	  $inputs.filter(function() {
+    	    	    return key == this.name;
+    	    	  }).val(value);
+    	    	});
+    	    	});
+    	    
+    	    $.getJSON('/jobtracker/jobtracker-service/address', function(data) {
+    	    	var $inputs = $('#address_form input');
+    	    	$.each(data, function(key, value) {
+    	    	  $inputs.filter(function() {
+    	    	    return key == this.name;
+    	    	  }).val(value);
+    	    	});
+    	    	});
+  
+    	 
+    	    // Make sure the url displayed in the the browser's location field includes parameters
+    	    options.dataUrl = urlObj.href;
+    	 
+    	   // Now call changePage() and tell it to switch to the page we just modified.
+    	   $.mobile.changePage($page, options);
+    	}
+    	};
+    	
+    	
+    
+    function populateWorkContactListPage(urlObj, options) {
+    	// Get the url parameter
+    	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+    	
+    	// The page we use to display QR code is already in the DOM.
+    	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+    	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+    	
+    	if (qrUrl) {
+    	// Get the page we are going to write content into.
+    	    var $page = $(pageSelector);
+    	    $.getJSON('/jobtracker/jobtracker-service/contactdetails?workcontacts', function(data) {
+    	    	contacts = data;
+    	    	var theme;
+    	    	$("#contacts_list").empty();
+    	    	$(data).each(function(index, obj){
+    	    		
+    	    		theme = (index%2 == 0 ) ? "a" : "c";
+    	    		$("#contacts_list").append('<a href="#show_contact_'+index+'"><li data-theme="'+theme+'"><img class="icon-wrapper" alt="'+obj.user_name+'" src="'+obj.image+'" >'+obj.user_name+'</a></li>');
+    	    		 
+    	    	});
+    	    	$("#contacts_list").listview('refresh');
+    	    	});
+    	 
+    	    // Make sure the url displayed in the the browser's location field includes parameters
+    	    options.dataUrl = urlObj.href;
+    	 
+    	   // Now call changePage() and tell it to switch to the page we just modified.
+    	   $.mobile.changePage($page, options);
+    	}
+    	};
+    	
+    	function populateJobSummaryPage(urlObj, options) {
+        	// Get the url parameter
+        	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+        	// The page we use to display QR code is already in the DOM.
+        	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+        	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+        	
+        	if (qrUrl) {
+        	// Get the page we are going to write content into.
+        	    var $page = $(pageSelector);
+        	    $.getJSON('/jobtracker/jobtracker-service/jobsummary', function(data) {
+        	    	$("#jobs_summary_list").empty();
+        	    	$(data).each(function(index, obj){
+        	    		if( data.assigned != 0 ) {
+        	    		  $("#jobs_summary_list").append('<li data-theme="a" ><a href="#assigned_jobs_list_page">Jobs Assigned ('+data.assigned+')</a></li>');
+        	    		}  
+        	    		if ( data.started != 0 ) {
+        	    		  $("#jobs_summary_list").append('<li data-theme="b" ><a href="#started_jobs_list_page">Jobs Started ('+data.started+')</a></li>');
+        	    		} 
+        	    		if ( data.completed != 0 ) {
+        	    		  $("#jobs_summary_list").append('<li data-theme="a" ><a href="#completed_jobs_list_page">Jobs Completed ('+data.completed+')</a></li>');
+        	    		} 
+        	    		if( data.assigned == 0 && data.started == 0 && data.completed == 0  )
+        	    			$("#jobs_summary_list").append('<h1>You have no job assignments</h1>');
+        	    			
+        	    	});
+        	    	$("#jobs_summary_list").listview('refresh');
+        	    	});
+        	 
+        	    // Make sure the url displayed in the the browser's location field includes parameters
+        	    options.dataUrl = urlObj.href;
+        	 
+        	   // Now call changePage() and tell it to switch to the page we just modified.
+        	   $.mobile.changePage($page, options);
+        	}
+        	};
+        	
+        	function populateAssignedJobsListPage(urlObj, options) {
+            	// Get the url parameter
+            	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+            	// The page we use to display QR code is already in the DOM.
+            	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+            	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+            	
+            	if (qrUrl) {
+            	// Get the page we are going to write content into.
+            	    var $page = $(pageSelector);
+            	    $.getJSON('/jobtracker/jobtracker-service/job?status=ASSIGNED', function(data) {
+            	    	assigned_jobs = data;
+            	    	$("#assigned_jobs_list").empty();
+            	    	var theme;
+            	    	$(data).each(function(index, obj){	
+            	    		  theme = (index%2 == 0 ) ? "a" : "c";
+            	    		  $("#assigned_jobs_list").append('<li data-theme="'+theme+'" ><a href="#display_assigned_job'+index+'">'+obj.title+'</a></li>');	
+            	    	});
+            	    	$("#assigned_jobs_list").listview('refresh');
+            	    	});
+            	 
+            	    // Make sure the url displayed in the the browser's location field includes parameters
+            	    options.dataUrl = urlObj.href;
+            	 
+            	   // Now call changePage() and tell it to switch to the page we just modified.
+            	   $.mobile.changePage($page, options);
+            	}
+            	};
+            	
+            	function populateStartedJobsListPage(urlObj, options) {
+                	// Get the url parameter
+                	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+                	// The page we use to display QR code is already in the DOM.
+                	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+                	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+                	
+                	if (qrUrl) {
+                	// Get the page we are going to write content into.
+                	    var $page = $(pageSelector);
+                	    $.getJSON('/jobtracker/jobtracker-service/job?status=STARTED', function(data) {
+                	    	started_jobs = data;
+                	    	$("#started_jobs_list").empty();
+                	    	var theme;
+                	    	$(data).each(function(index, obj){	
+                	    		  theme = (index%2 == 0 ) ? "a" : "c";
+                	    		  $("#started_jobs_list").append('<li data-theme="'+theme+'" ><a href="#display_started_job'+index+'">'+obj.title+'</a></li>');	
+                	    	});
+                	    	$("#started_jobs_list").listview('refresh');
+                	    	});
+                	 
+                	    // Make sure the url displayed in the the browser's location field includes parameters
+                	    options.dataUrl = urlObj.href;
+                	 
+                	   // Now call changePage() and tell it to switch to the page we just modified.
+                	   $.mobile.changePage($page, options);
+                	}
+                	};
+                	
+                	function populateCompletedJobsListPage(urlObj, options) {
+                    	// Get the url parameter
+                    	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+                    	// The page we use to display QR code is already in the DOM.
+                    	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+                    	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+                    	
+                    	if (qrUrl) {
+                    	// Get the page we are going to write content into.
+                    	    var $page = $(pageSelector);
+                    	    $.getJSON('/jobtracker/jobtracker-service/job?status=COMPLETED', function(data) {
+                    	    	completed_jobs = data;
+                    	    	$("#completed_jobs_list").empty();
+                    	    	var theme;
+                    	    	$(data).each(function(index, obj){	
+                    	    		  theme = (index%2 == 0 ) ? "a" : "c";
+                    	    		  $("#completed_jobs_list").append('<li data-theme="'+theme+'" ><a href="#display_completed_job'+index+'">'+obj.title+'</a></li>');	
+                    	    	});
+                    	    	$("#completed_jobs_list").listview('refresh');
+                    	    	});
+                    	 
+                    	    // Make sure the url displayed in the the browser's location field includes parameters
+                    	    options.dataUrl = urlObj.href;
+                    	 
+                    	   // Now call changePage() and tell it to switch to the page we just modified.
+                    	   $.mobile.changePage($page, options);
+                    	}
+                    	};
+                    	
+                    	 
+                    	function populateJobNotesListPage(urlObj, options) {
+                        	// Get the url parameter
+                        	var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+                        	// The page we use to display QR code is already in the DOM.
+                        	// The id of the page we are going to write the content into is specified in the hash before the '?'.
+                        	var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+                        	
+                        	if (qrUrl) {
+                        	// Get the page we are going to write content into.
+                        	    var $page = $(pageSelector);
+                        	    $.getJSON('/jobtracker/jobtracker-service/jobnotes?job='+selected_job.key, function(data) {
+                        	    	var notes = data;
+                        	    	var list = $("#job_notes_list");
+                        	    	list.empty();
+                        	    	$("#job_notes_header").empty();
+                        	    	$("#job_notes_header").append('<h1>'+selected_job.title+'</h1>');
+                        	  
+                        	    	$(data).each(function(index, obj){	
+                        	    		  var $element = $('<div data-role="collapsible" data-collapsed="true"><h1>'+obj.entryTime+'</h1><textarea readonly="true">'+obj.text+'</textarea></div>').appendTo(list);
+                        	    	      $element.collapsible(); 
+                        	    	});
+                        	    	list.listview('refresh');
+                        	    	});
+                        	 
+                        	    // Make sure the url displayed in the the browser's location field includes parameters
+                        	    options.dataUrl = urlObj.href;
+                        	 
+                        	   // Now call changePage() and tell it to switch to the page we just modified.
+                        	   $.mobile.changePage($page, options);
+                        	}
+                        	};
+               
+     
+	
+	function populateJobNoteEntryPage() {
+
+		$("#job_note_entry_header").html("<h1>" + selected_job.title + "</h1>");
+
+	};
+
+	function populateJobDetailsPage(urlObj, options, job) {
+		// Get the url parameter
+		var qrUrl = decodeURIComponent(urlObj.hash.replace(/.*url=/, ""));
+
+		// The page we use to display QR code is already in the DOM.
+		// The id of the page we are going to write the content into is specified in the hash before the '?'.
+		//var	pageSelector = urlObj.hash.replace(/\?.*$/, "");
+
+		if (qrUrl) {
+			// Get the page we are going to write content into.
+			// var $page = $(pageSelector);
+
+			// Make sure the url displayed in the the browser's location field includes parameters
+			options.dataUrl = urlObj.href;
+			selected_job = job;
+			// Now call changePage() and tell it to switch to the page we just modified.
+			$("#job_details_page_header").html("<h1>" + job.title + "</h1>");
+
+			var $inputs = $('#job_details_form input');
+			$.each(job, function(key, value) {
+				$inputs.filter(function() {
+					return key == this.name;
+				}).val(value);
+			});
+
+			var $inputs = $('#job_address input');
+			$.each(job.address, function(key, value) {
+				$inputs.filter(function() {
+					return key == this.name;
+				}).val(value);
+			});
+
+			$("#job_description_textarea").val(job.description);
+			$("#job_contact_phone").attr("href", "tel:+" + job.contactNumber);
+
+			if (job.location) { 
+				$("#show_map_button").show();
+				$("#show_map_button").attr("href","map.html?job="+job.key);
+			}
+			if (job.status == "ASSIGNED"){
+				$("#job_start_button").show();
+				$("#job_complete_button").hide();
+				$("#show_signature_button").hide();
+				
+			}	
+			else if (job.status == "STARTED"){
+				$("#job_start_button").hide();
+				$("#job_complete_button").attr("href","signature.html?job="+selected_job.key);
+				$("#job_complete_button").show();
+				$("#show_signature_button").hide();
+				
+			} else if (job.status == "COMPLETED") {
+				$("#job_start_button").hide();
+				$("#job_complete_button").hide();
+				$("#show_signature_button").show();
+				$("#show_signature_button").attr("href","signature.html?job="+selected_job.key);
+				
+			}
+				
+
+			$.mobile.changePage("#job_details_page", options);
+
+		}
+		;
+
+		$("#job_start_button").click(
+				function() {
+					$.post("/jobtracker/jobtracker-service/jobstatus?job=" + selected_job.key
+							+ "&state=STARTED", function(data, status) {
+						if (status == "success" && data == "success") {
+							
+							$.mobile.changePage("#jobs_summary_page");
+							$("#updateConfirmationDialog").click();
+						}
+					}, "html");
+				});
+
+	};
+	
+	$("#job_note_entry_button").click(
+			function() {
+				var t = $("#job_note_entry_text").val();
+				var formData = {"job":selected_job.key,"text":t};
+				$.ajax({
+				    url : "/jobtracker/jobtracker-service/jobnotes",
+				    type: "POST",
+				    data : formData,
+				    success: function(data, status)
+				    {
+				    	if (data == "success") {
+							$("#updateConfirmationDialog").click();
+							
+						} else {
+							$("#updateFailureDialog").click();
+						}
+						//$.mobile.changePage("#job_notes_page");
+						location.hash = "job_notes_page";
+				    },
+				    error: function ()
+				    {
+				    	$("#updateFailureDialog").click();
+				    }
+				});
+				
+			});
+
+	
+	
+	
+</script>
+
+
+
+</body>
+</html>
